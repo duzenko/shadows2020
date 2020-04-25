@@ -18,7 +18,8 @@ void processInput( GLFWwindow* window )
     if ( glfwGetKey( window, GLFW_KEY_2 ) == GLFW_PRESS )
         glUniform1i( 1, 1 );
 
-    glm::mat4 proj = glm::perspective( glm::radians( 45.0f ), (float)SCR_WIDTH / SCR_HEIGHT, .1f, 10.f );
+    float viewAngle = true ? atan( (float)SCR_HEIGHT/SCR_WIDTH ) * 2 : 90;
+    glm::mat4 proj = glm::perspective( viewAngle, (float)SCR_WIDTH / SCR_HEIGHT, .1f, 10.f );
     glUniformMatrix4fv( 3, 1, GL_FALSE, glm::value_ptr( proj ) );
     glm::mat4 view = glm::lookAt(
         glm::vec3( 0, 0, 1 ),

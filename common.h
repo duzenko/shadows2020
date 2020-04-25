@@ -30,7 +30,7 @@ struct SSBO_DATA {
 
 #ifdef CASE3D
 
-const int VertexCount = 3 * 40;
+const int VertexCount = 3 * 600;
 struct SSBO_DATA {
     int N;
     int crap[3]; // aligns to vec4
