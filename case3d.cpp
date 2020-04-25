@@ -10,9 +10,12 @@ in vec4 in_position;
 
 out vec4 var_position;
 
+layout( location = 3 ) uniform mat4 matProjection;
+layout( location = 4 ) uniform mat4 matView;
+
 void main()
 {
-    gl_Position = in_position;
+    gl_Position = matProjection * matView * in_position;
     var_position = in_position;
 }
 );
@@ -24,6 +27,7 @@ in vec4 var_position;
 
 layout( location = 0 ) uniform float intensity;
 layout( location = 1 ) uniform bool limit;
+layout( location = 2 ) uniform vec2 lightPos;
 
 layout( std430, binding = 3 ) buffer layoutName
 {
@@ -40,7 +44,7 @@ bool intersect( vec2 A, vec2 B, vec2 C, vec2 D ) {
 }
 
 bool intersectsOne( vec2 point1, vec2 point2 ) {
-    return intersect( vec2( 0 ), var_position.xy, point1, point2 );
+    return intersect( lightPos, var_position.xy, point1, point2 );
 }
 
 bool intersectsAny() {
@@ -55,7 +59,7 @@ bool intersectsAny() {
 void main()
 {
     vec2 xy = vec2( N, N );
-    gl_FragColor.rgb = vec3( 1 / ( 1 + length( var_position.xy ) ) );
+    gl_FragColor.rgb = vec3( 1 / ( 1 + distance( var_position.xy, lightPos ) ) );
     if ( intersectsAny() )
         gl_FragColor = vec4( 1, 0, 1, 1 );
     gl_FragColor *= intensity;
