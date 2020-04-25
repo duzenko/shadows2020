@@ -3,8 +3,8 @@
 
 #ifdef CASE2D
 
-const char* vertex_shader_text = MULTILINE(
-#version 430\n
+const char* const vertex_shader_text = R""""(
+#version 430
 
 in vec4 in_position;
 
@@ -18,10 +18,10 @@ void main()
     gl_Position = matProjection * matView * in_position;
     var_position = in_position;
 }
-);
+)"""";
 
-const char* fragment_shader_text = MULTILINE(
-#version 430\n
+const char* const fragment_shader_text = R""""(
+#version 430
 
 in vec4 var_position;
 
@@ -64,7 +64,7 @@ void main()
         gl_FragColor = vec4( 1, 0, 1, 1 );
     gl_FragColor *= intensity;
 }
-);
+)"""";
 
 struct SSBO_DATA ssboData { VertexCount };
 

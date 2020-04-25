@@ -22,6 +22,7 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{A01E5932-89C7-4DD1-B5F9-16E4B02FC94E}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
+    <ProjectName>shadows2020</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
