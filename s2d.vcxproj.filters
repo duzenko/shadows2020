@@ -24,6 +24,9 @@
     <ClCompile Include="case2d.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="case3d.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h">

@@ -3,8 +3,8 @@
 #include "common.h"
 
 // settings
-const unsigned int SCR_WIDTH = 1280;
-const unsigned int SCR_HEIGHT = 800;
+int SCR_WIDTH = 1280;
+int SCR_HEIGHT = 800;
 
 
 void processInput( GLFWwindow* window )
@@ -15,7 +15,10 @@ void processInput( GLFWwindow* window )
         glUniform1i( 1, 0 );
     if ( glfwGetKey( window, GLFW_KEY_2 ) == GLFW_PRESS )
         glUniform1i( 1, 1 );
-
+    double xpos, ypos;
+    glfwGetCursorPos( window, &xpos, &ypos );
+    glfwGetFramebufferSize( window, &SCR_WIDTH, &SCR_HEIGHT );
+    glUniform2f( 2, xpos / SCR_WIDTH * 2 - 1, 1 - ypos / SCR_HEIGHT * 2 );
 }
 
 void framebuffer_size_callback( GLFWwindow* window, int width, int height )
@@ -46,7 +49,7 @@ int main()
 {
     glfwInit();
     glfwWindowHint( GLFW_MAXIMIZED, GLFW_TRUE );
-    GLFWwindow* window = glfwCreateWindow( SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL );
+    GLFWwindow* window = glfwCreateWindow( SCR_WIDTH, SCR_HEIGHT, "OpenGL", NULL, NULL );
     if ( window == NULL )
     {
         std::cout << "Failed to create GLFW window" << std::endl;
