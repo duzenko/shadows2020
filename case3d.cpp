@@ -103,7 +103,7 @@ void init() {
         auto& p1 = data.points[i], & p2 = data.points[i + 1], & p3 = data.points[i + 2];
         p1.x = floatRandom() * .9f;
         p1.y = floatRandom() * .9f;
-        float a = floatRandom() * 2 * 3.14159;
+        float a = floatRandom() * 2 * 3.14159f;
         p2.x = p1.x + sin( a ) * .1f;
         p2.y = p1.y + cos( a ) * .1f;
         p3 = ( p1 + p2 ) * .5f;
