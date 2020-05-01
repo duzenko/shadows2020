@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
+    <Filter Include="Source Files\2d">
+      <UniqueIdentifier>{95d783db-e74b-43c6-89a8-6fccd43abb78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\3d">
+      <UniqueIdentifier>{ec637a6f-b0e5-4d0e-9d4f-ee2e4a61e07b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -22,15 +28,31 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="case2d.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\2d</Filter>
     </ClCompile>
     <ClCompile Include="case3d.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\3d</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="GLSL\3d.vs">
+      <Filter>Source Files\3d</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GLSL\3d.fs">
+      <Filter>Source Files\3d</Filter>
+    </None>
+    <None Include="..\glsl\2d.fs">
+      <Filter>Source Files\2d</Filter>
+    </None>
+    <None Include="..\glsl\2d.vs">
+      <Filter>Source Files\2d</Filter>
+    </None>
   </ItemGroup>
 </Project>

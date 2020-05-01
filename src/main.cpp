@@ -4,6 +4,8 @@
 #include <glm/mat4x4.hpp>
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <map>
+#include <fstream>
 
 // settings
 int SCR_WIDTH = 1280;
@@ -61,6 +63,27 @@ void compileShader( int shader ) {
     }
 }
 
+void loadShader( std::string& name, GLenum shaderType, GLuint program ) {
+    std::map<GLenum, char*> knownTypes = { {GL_VERTEX_SHADER, ".vs"}, {GL_FRAGMENT_SHADER, ".fs"} };
+    char* fileExt = knownTypes[shaderType];
+    std::ifstream in( "glsl\\" + name + fileExt );
+    std::string contents( ( std::istreambuf_iterator<char>( in ) ),
+        std::istreambuf_iterator<char>() );
+    auto ptr = contents.c_str();
+    auto shader = glCreateShader( shaderType );
+    glShaderSource( shader, 1, &ptr, NULL );
+    compileShader( shader );
+    glAttachShader( program, shader );
+}
+
+void loadGlProgram( std::string name ) {
+    auto program = glCreateProgram();
+    loadShader( name, GL_VERTEX_SHADER, program );
+    loadShader( name, GL_FRAGMENT_SHADER, program );
+    glLinkProgram( program );
+    glUseProgram( program );
+}
+
 int main()
 {
     glfwInit();
@@ -90,18 +113,7 @@ int main()
     glBindBufferBase( GL_SHADER_STORAGE_BUFFER, 3, ssbo );
     glBindBuffer( GL_SHADER_STORAGE_BUFFER, 0 );
 
-    auto vertex_shader = glCreateShader( GL_VERTEX_SHADER );
-    glShaderSource( vertex_shader, 1, &vertex_shader_text, NULL );
-    compileShader( vertex_shader );
-    auto fragment_shader = glCreateShader( GL_FRAGMENT_SHADER );
-    glShaderSource( fragment_shader, 1, &fragment_shader_text, NULL );
-    compileShader( fragment_shader );
-
-    auto program = glCreateProgram();
-    glAttachShader( program, vertex_shader );
-    glAttachShader( program, fragment_shader );
-    glLinkProgram( program );
-    glUseProgram( program );
+    compileShaders();
 
     while ( !glfwWindowShouldClose( window ) ) {
         processInput( window );

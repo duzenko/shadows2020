@@ -1,5 +1,10 @@
 .vs/
 Debug/
-glfw/glfw-3.3.2.bin.WIN32/
 glm-master/
 Release/
+glfw-3.3.2.bin.WIN32/
+*.exe
+*.exp
+*.ilk
+*.lib
+*.pdb

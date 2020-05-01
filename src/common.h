@@ -7,11 +7,18 @@
 
 #define floatRandom() (static_cast <float> ( rand() ) / static_cast <float> ( RAND_MAX ) * 2 - 1)
 
-#if 0
-#define CASE2D
-#else
-#define CASE3D
+#ifdef CASE
+#error "ifdef name conflict"
 #endif
+#define CASE 2
+#if CASE==2
+#define CASE2D
+#elif CASE==3
+#define CASE3D
+#else
+#error "define out of range"
+#endif
+#undef CASE
 
 #if defined(CASE2D) && defined(CASE3D)
 #error "Can only define one of CASE2D and CASE3D"
@@ -19,7 +26,7 @@
 
 #ifdef CASE2D
 
-const int VertexCount = 2 * 200;
+const int VertexCount = 2 * 80;
 struct SSBO_DATA { 
     int N;
     int crap; // SOB aligns to 8 :/
@@ -30,7 +37,7 @@ struct SSBO_DATA {
 
 #ifdef CASE3D
 
-const int VertexCount = 3 * 200;
+const int VertexCount = 3 * 40;
 struct SSBO_DATA {
     int N;
     int crap[3]; // aligns to vec4
@@ -41,8 +48,8 @@ struct SSBO_DATA {
 
 extern SSBO_DATA ssboData;
 
-extern const char* const vertex_shader_text;
-extern const char* const fragment_shader_text;
-
 extern void init();
+extern void compileShader( int shader );
+extern void compileShaders();
+extern void loadGlProgram( std::string name );
 extern void draw();
