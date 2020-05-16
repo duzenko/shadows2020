@@ -7,14 +7,53 @@ out vec4 FragColor;
 layout( location = 0 ) uniform float intensity;
 layout( location = 1 ) uniform bool limit;
 layout( location = 2 ) uniform vec2 lightPos;
+layout( location = 5 ) uniform bool soften;
+layout( location = 6 ) uniform float time;
 
-layout( std430, binding = 3 ) buffer layoutName
+layout( std430, binding = 0 ) buffer layoutName
 {
     int N;
     vec4 points[];
 };
 
-const float kEpsilon = 1e-3;
+// A single iteration of Bob Jenkins' One-At-A-Time hashing algorithm.
+uint hash( uint x ) {
+    x += ( x << 10u );
+    x ^= ( x >>  6u );
+    x += ( x <<  3u );
+    x ^= ( x >> 11u );
+    x += ( x << 15u );
+    return x;
+}
+
+// Compound versions of the hashing algorithm I whipped together.
+uint hash( uvec2 v ) { return hash( v.x ^ hash(v.y)                         ); }
+uint hash( uvec3 v ) { return hash( v.x ^ hash(v.y) ^ hash(v.z)             ); }
+uint hash( uvec4 v ) { return hash( v.x ^ hash(v.y) ^ hash(v.z) ^ hash(v.w) ); }
+
+// Construct a float with half-open range [0:1] using low 23 bits.
+// All zeroes yields 0.0, all ones yields the next smallest representable value below 1.0.
+float floatConstruct( uint m ) {
+    const uint ieeeMantissa = 0x007FFFFFu; // binary32 mantissa bitmask
+    const uint ieeeOne      = 0x3F800000u; // 1.0 in IEEE binary32
+
+    m &= ieeeMantissa;                     // Keep only mantissa bits (fractional part)
+    m |= ieeeOne;                          // Add fractional part to 1.0
+
+    float  f = uintBitsToFloat( m );       // Range [1:2]
+    return f - 1.0;                        // Range [0:1]
+}
+
+// Pseudo-random value in half-open range [0:1].
+float random( float x ) { return floatConstruct(hash(floatBitsToUint(x))); }
+float random( vec2  v ) { return floatConstruct(hash(floatBitsToUint(v))); }
+float random( vec3  v ) { return floatConstruct(hash(floatBitsToUint(v))); }
+float random( vec4  v ) { return floatConstruct(hash(floatBitsToUint(v))); }
+
+vec3 randomSeed1 = vec3(gl_FragCoord.xy, time);
+vec3 randomSeed2 = vec3(gl_FragCoord.yx, 1-time);
+vec2 softOffset = soften ? vec2(random(randomSeed1),random(randomSeed2)) - 0.5 : vec2(0);
+vec3 lightPos3 = vec3(lightPos + softOffset * 1e-2, 0.01);
 
 float rayTriangleIntersect( 
     vec3 orig, vec3 dir, 
@@ -43,7 +82,6 @@ float rayTriangleIntersect(
 
 bool intersectsOne( int i ) {
     //return distance(var_position.xyz, points[i].xyz) < .03|| distance(var_position.xyz, points[i+1].xyz) < .03|| distance(var_position.xyz, points[i+2].xyz) < .03;
-    vec3 lightPos3 = vec3(lightPos, 0.01);
     float rayT = rayTriangleIntersect(lightPos3, var_position.xyz - lightPos3, points[i].xyz, points[i+1].xyz, points[i+2].xyz );
     if(rayT <= 0)
         return false;

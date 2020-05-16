@@ -40,19 +40,17 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="GLSL\3d.vs">
-      <Filter>Source Files\3d</Filter>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="GLSL\3d.fs">
-      <Filter>Source Files\3d</Filter>
-    </None>
     <None Include="..\glsl\2d.fs">
       <Filter>Source Files\2d</Filter>
     </None>
     <None Include="..\glsl\2d.vs">
       <Filter>Source Files\2d</Filter>
+    </None>
+    <None Include="..\glsl\3d.fs">
+      <Filter>Source Files\3d</Filter>
+    </None>
+    <None Include="..\glsl\3d.vs">
+      <Filter>Source Files\3d</Filter>
     </None>
   </ItemGroup>
 </Project>

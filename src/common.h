@@ -10,7 +10,7 @@
 #ifdef CASE
 #error "ifdef name conflict"
 #endif
-#define CASE 2
+#define CASE 3
 #if CASE==2
 #define CASE2D
 #elif CASE==3
@@ -37,7 +37,7 @@ struct SSBO_DATA {
 
 #ifdef CASE3D
 
-const int VertexCount = 3 * 40;
+const int VertexCount = 3 * 200;
 struct SSBO_DATA {
     int N;
     int crap[3]; // aligns to vec4

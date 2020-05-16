@@ -131,12 +131,12 @@
     <ClInclude Include="common.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="GLSL\3d.vs" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\glsl\2d.fs" />
     <None Include="..\glsl\2d.vs" />
-    <None Include="GLSL\3d.fs" />
+    <None Include="..\glsl\3d.fs">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\glsl\3d.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

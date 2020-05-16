@@ -5,20 +5,21 @@
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <map>
+#include <cmath>
 #include <fstream>
 
 // settings
 int SCR_WIDTH = 1280;
 int SCR_HEIGHT = 800;
 
+bool u_limit = false;
+bool u_soften = true;
+bool sendTime = true;
+
 void processInput( GLFWwindow* window )
 {
     if ( glfwGetKey( window, GLFW_KEY_ESCAPE ) == GLFW_PRESS )
         glfwSetWindowShouldClose( window, true );
-    if ( glfwGetKey( window, GLFW_KEY_1 ) == GLFW_PRESS )
-        glUniform1i( 1, 0 );
-    if ( glfwGetKey( window, GLFW_KEY_2 ) == GLFW_PRESS )
-        glUniform1i( 1, 1 );
 
     float viewAngle = true ? atan( (float)SCR_HEIGHT/SCR_WIDTH ) * 2 : 90;
     glm::mat4 proj = glm::perspective( viewAngle, (float)SCR_WIDTH / SCR_HEIGHT, .1f, 10.f );
@@ -37,6 +38,13 @@ void processInput( GLFWwindow* window )
     auto screenPos = glm::vec4( xpos/SCR_WIDTH * 2 - 1, 1 - 2 * ypos/SCR_HEIGHT, 0, 0 );
     auto worldPos = projInv * screenPos;
     glUniform2fv( 2, 1, glm::value_ptr( worldPos ) );
+
+    if ( sendTime ) {
+        double time = glfwGetTime();
+        glUniform1f( 6, (float)fmod( time, 1 ) );
+    }
+    glUniform1i( 1, u_limit );
+    glUniform1i( 5, u_soften );
 }
 
 void framebuffer_size_callback( GLFWwindow* window, int width, int height )
@@ -84,6 +92,22 @@ void loadGlProgram( std::string name ) {
     glUseProgram( program );
 }
 
+void key_callback( GLFWwindow* window, int key, int scancode, int action, int mods )
+{
+    if ( action != GLFW_PRESS ) {
+        return;
+    }
+    if ( key == GLFW_KEY_L ) {
+        u_limit = !u_limit;
+    }
+    if ( key == GLFW_KEY_S ) {
+        u_soften = !u_soften;
+    }
+    if ( key == GLFW_KEY_T ) {
+        sendTime = !sendTime;
+    }
+}
+
 int main()
 {
     glfwInit();
@@ -96,6 +120,7 @@ int main()
     }
     glfwMakeContextCurrent( window );
     glfwSetFramebufferSizeCallback( window, framebuffer_size_callback );
+    glfwSetKeyCallback( window, key_callback );
 
     if ( !gladLoadGLLoader( (GLADloadproc)glfwGetProcAddress ) ) {
         std::cout << "Failed to initialize GLAD" << std::endl;
@@ -110,7 +135,7 @@ int main()
     glGenBuffers( 1, &ssbo );
     glBindBuffer( GL_SHADER_STORAGE_BUFFER, ssbo );
     glBufferData( GL_SHADER_STORAGE_BUFFER, sizeof( ssboData ), &ssboData, GL_DYNAMIC_COPY );
-    glBindBufferBase( GL_SHADER_STORAGE_BUFFER, 3, ssbo );
+    glBindBufferBase( GL_SHADER_STORAGE_BUFFER, 0, ssbo );
     glBindBuffer( GL_SHADER_STORAGE_BUFFER, 0 );
 
     compileShaders();
