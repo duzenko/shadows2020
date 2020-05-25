@@ -50,10 +50,14 @@ float random( vec2  v ) { return floatConstruct(hash(floatBitsToUint(v))); }
 float random( vec3  v ) { return floatConstruct(hash(floatBitsToUint(v))); }
 float random( vec4  v ) { return floatConstruct(hash(floatBitsToUint(v))); }
 
+const float PI = 3.1415926535897932384626433832795;
+
 vec3 randomSeed1 = vec3(gl_FragCoord.xy, time);
 vec3 randomSeed2 = vec3(gl_FragCoord.yx, 1-time);
-vec2 softOffset = soften ? vec2(random(randomSeed1),random(randomSeed2)) - 0.5 : vec2(0);
-vec3 lightPos3 = vec3(lightPos + softOffset * 1e-2, 0.01);
+float angle = random(randomSeed1) * 2*PI;
+float radius = sqrt(random(randomSeed2) + 0.1);
+vec2 softOffset = soften ? vec2(sin(angle),cos(angle)) : vec2(0);
+vec3 lightPos3 = vec3(lightPos + softOffset * radius * 1e-2, 0.01);
 
 float rayTriangleIntersect( 
     vec3 orig, vec3 dir, 
