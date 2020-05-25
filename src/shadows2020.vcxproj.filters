@@ -52,5 +52,8 @@
     <None Include="..\glsl\3d.vs">
       <Filter>Source Files\3d</Filter>
     </None>
+    <None Include="..\glsl\random.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -71,15 +71,21 @@ void compileShader( int shader ) {
     }
 }
 
+std::string readGlsl(std::string name) {
+    std::ifstream in( "glsl\\" + name );
+    std::string contents( ( std::istreambuf_iterator<char>( in ) ),
+        std::istreambuf_iterator<char>() );
+    return contents;
+}
+
 void loadShader( std::string& name, GLenum shaderType, GLuint program ) {
     std::map<GLenum, char*> knownTypes = { {GL_VERTEX_SHADER, ".vs"}, {GL_FRAGMENT_SHADER, ".fs"} };
     char* fileExt = knownTypes[shaderType];
-    std::ifstream in( "glsl\\" + name + fileExt );
-    std::string contents( ( std::istreambuf_iterator<char>( in ) ),
-        std::istreambuf_iterator<char>() );
-    auto ptr = contents.c_str();
+    std::string main = readGlsl( name + fileExt );
+    std::string random = readGlsl( "random.glsl" );
+    const GLchar* ptr[] = { main.c_str(), random.c_str() };
     auto shader = glCreateShader( shaderType );
-    glShaderSource( shader, 1, &ptr, NULL );
+    glShaderSource( shader, 2, ptr, NULL );
     compileShader( shader );
     glAttachShader( program, shader );
 }
