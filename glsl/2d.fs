@@ -5,12 +5,25 @@ in vec4 var_position;
 layout( location = 0 ) uniform float intensity;
 layout( location = 1 ) uniform bool limit;
 layout( location = 2 ) uniform vec2 lightPos;
+layout( location = 5 ) uniform bool soften;
+layout( location = 6 ) uniform float time;
 
 layout( std430, binding = 0 ) buffer layoutName
 {
     int N;
     vec2 points[];
 };
+
+float random( vec3  v );
+
+const float PI = 3.1415926535897932384626433832795;
+
+vec3 randomSeed1 = vec3(gl_FragCoord.xy, time);
+vec3 randomSeed2 = vec3(gl_FragCoord.yx, 1-time);
+float angle = random(randomSeed1) * 2*PI;
+float radius = sqrt(random(randomSeed2) + 0.1);
+vec2 softOffset = soften ? vec2(sin(angle),cos(angle)) : vec2(0);
+vec2 lightSamplePos = lightPos + softOffset * radius * 1e-2;
 
 bool ccw( vec2 A, vec2 B, vec2 C ) {
     return ( C.y - A.y ) * ( B.x - A.x ) > ( B.y - A.y )* ( C.x - A.x );
@@ -22,7 +35,7 @@ bool intersect( vec2 A, vec2 B, vec2 C, vec2 D ) {
 
 bool intersectsOne( vec2 point1, vec2 point2 ) {
     //return distance(point1, point2 ) < .1;
-    return intersect( lightPos, var_position.xy, point1, point2 );
+    return intersect( lightSamplePos, var_position.xy, point1, point2 );
 }
 
 bool intersectsAny() {
