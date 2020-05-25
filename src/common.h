@@ -10,7 +10,7 @@
 #ifdef CASE
 #error "ifdef name conflict"
 #endif
-#define CASE 3
+#define CASE 2
 #if CASE==2
 #define CASE2D
 #elif CASE==3
@@ -26,7 +26,7 @@
 
 #ifdef CASE2D
 
-const int VertexCount = 2 * 80;
+const int VertexCount = 2 * 400;
 struct SSBO_DATA { 
     int N;
     int crap; // SOB aligns to 8 :/

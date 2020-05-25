@@ -6,7 +6,7 @@ layout( location = 0 ) uniform float intensity;
 layout( location = 1 ) uniform bool limit;
 layout( location = 2 ) uniform vec2 lightPos;
 
-layout( std430, binding = 3 ) buffer layoutName
+layout( std430, binding = 0 ) buffer layoutName
 {
     int N;
     vec2 points[];
@@ -21,6 +21,7 @@ bool intersect( vec2 A, vec2 B, vec2 C, vec2 D ) {
 }
 
 bool intersectsOne( vec2 point1, vec2 point2 ) {
+    //return distance(point1, point2 ) < .1;
     return intersect( lightPos, var_position.xy, point1, point2 );
 }
 
