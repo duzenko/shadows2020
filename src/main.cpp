@@ -8,22 +8,33 @@
 #include <cmath>
 #include <fstream>
 
-// settings
 int SCR_WIDTH = 1280;
 int SCR_HEIGHT = 800;
 
 bool u_limit = false;
 bool u_soften = true;
 bool sendTime = true;
+float u_lightSize = 1e-2f;
 
-void processInput( GLFWwindow* window )
-{
+void processInput( GLFWwindow* window ) {
     if ( glfwGetKey( window, GLFW_KEY_ESCAPE ) == GLFW_PRESS )
         glfwSetWindowShouldClose( window, true );
 
-    float viewAngle = true ? atan( (float)SCR_HEIGHT/SCR_WIDTH ) * 2 : 90;
-    glm::mat4 proj = glm::perspective( viewAngle, (float)SCR_WIDTH / SCR_HEIGHT, .1f, 10.f );
+    double xpos, ypos;
+    glfwGetCursorPos( window, &xpos, &ypos );
+    glfwGetFramebufferSize( window, &SCR_WIDTH, &SCR_HEIGHT );
+    float viewAngle = true ? atan( (float) SCR_HEIGHT / SCR_WIDTH ) * 2 : 90;
+
+    glUniform1i( 1, u_limit );
+
+    glm::mat4 proj = glm::perspective( viewAngle, (float) SCR_WIDTH / SCR_HEIGHT, .1f, 10.f );
+    auto projInv = glm::inverse( proj );
+    auto screenPos = glm::vec4( xpos / SCR_WIDTH * 2 - 1, 1 - 2 * ypos / SCR_HEIGHT, 0, 0 );
+    auto worldPos = projInv * screenPos;
+    glUniform2fv( 2, 1, glm::value_ptr( worldPos ) );
+
     glUniformMatrix4fv( 3, 1, GL_FALSE, glm::value_ptr( proj ) );
+
     glm::mat4 view = glm::lookAt(
         glm::vec3( 0, 0, 1 ),
         glm::vec3( 0, 0, 0 ),
@@ -31,47 +42,21 @@ void processInput( GLFWwindow* window )
     );
     glUniformMatrix4fv( 4, 1, GL_FALSE, glm::value_ptr( view ) );
 
-    double xpos, ypos;
-    glfwGetCursorPos( window, &xpos, &ypos );
-    glfwGetFramebufferSize( window, &SCR_WIDTH, &SCR_HEIGHT );
-    auto projInv = glm::inverse( proj );
-    auto screenPos = glm::vec4( xpos/SCR_WIDTH * 2 - 1, 1 - 2 * ypos/SCR_HEIGHT, 0, 0 );
-    auto worldPos = projInv * screenPos;
-    glUniform2fv( 2, 1, glm::value_ptr( worldPos ) );
+    glUniform1i( 5, u_soften );
 
     if ( sendTime ) {
         double time = glfwGetTime();
-        glUniform1f( 6, (float)fmod( time, 1 ) );
+        glUniform1f( 6, (float) fmod( time, 1 ) );
     }
-    glUniform1i( 1, u_limit );
-    glUniform1i( 5, u_soften );
+
+    glUniform1f( 7, u_lightSize );
 }
 
-void framebuffer_size_callback( GLFWwindow* window, int width, int height )
-{
+void framebuffer_size_callback( GLFWwindow* window, int width, int height ) {
     glViewport( 0, 0, width, height );
 }
 
-void compileShader( int shader ) {
-    glCompileShader( shader );
-
-    GLint isCompiled = 0;
-    glGetShaderiv( shader, GL_COMPILE_STATUS, &isCompiled );
-    if ( isCompiled == GL_FALSE ) {
-        GLint maxLength = 0;
-        glGetShaderiv( shader, GL_INFO_LOG_LENGTH, &maxLength );
-
-        // The maxLength includes the NULL character
-        std::vector<GLchar> errorLog( maxLength );
-        glGetShaderInfoLog( shader, maxLength, &maxLength, &errorLog[0] );
-        for ( auto i : errorLog )
-            std::cout << i;
-
-        glDeleteShader( shader );
-    }
-}
-
-std::string readGlsl(std::string name) {
+std::string readGlsl( std::string name ) {
     std::ifstream in( "glsl\\" + name );
     std::string contents( ( std::istreambuf_iterator<char>( in ) ),
         std::istreambuf_iterator<char>() );
@@ -83,10 +68,29 @@ void loadShader( std::string& name, GLenum shaderType, GLuint program ) {
     char* fileExt = knownTypes[shaderType];
     std::string main = readGlsl( name + fileExt );
     std::string random = readGlsl( "random.glsl" );
-    const GLchar* ptr[] = { main.c_str(), random.c_str() };
+    std::string common = readGlsl( "common.glsl" );
+    const GLchar* ptr[] = { common.c_str(), random.c_str(), main.c_str()  };
     auto shader = glCreateShader( shaderType );
-    glShaderSource( shader, 2, ptr, NULL );
-    compileShader( shader );
+    glShaderSource( shader, 3, ptr, NULL );
+
+    glCompileShader( shader );
+
+    GLint isCompiled = 0;
+    glGetShaderiv( shader, GL_COMPILE_STATUS, &isCompiled );
+    if ( isCompiled == GL_FALSE ) {
+        GLint maxLength = 0;
+        glGetShaderiv( shader, GL_INFO_LOG_LENGTH, &maxLength );
+
+        // The maxLength includes the NULL character
+        std::vector<GLchar> errorLog( maxLength );
+        glGetShaderInfoLog( shader, maxLength, &maxLength, &errorLog[0] );
+        std::cout << name + fileExt << " compile failed\n";
+        for ( auto i : errorLog )
+            std::cout << i;
+
+        glDeleteShader( shader );
+    }
+
     glAttachShader( program, shader );
 }
 
@@ -95,6 +99,19 @@ void loadGlProgram( std::string name ) {
     loadShader( name, GL_VERTEX_SHADER, program );
     loadShader( name, GL_FRAGMENT_SHADER, program );
     glLinkProgram( program );
+    GLint link_ok = GL_FALSE;
+    glGetProgramiv( program, GL_LINK_STATUS, &link_ok );
+    if ( !link_ok ) {
+        GLint maxLength = 0;
+        glGetProgramiv( program, GL_INFO_LOG_LENGTH, &maxLength );
+
+        // The maxLength includes the NULL character
+        std::vector<GLchar> errorLog( maxLength+1 );
+        glGetProgramInfoLog( program, maxLength, &maxLength, &errorLog[0] );
+        std::cout << name << " link failed\n";
+        for ( auto i : errorLog )
+            std::cout << i;
+    }
     glUseProgram( program );
 }
 
@@ -114,6 +131,10 @@ void key_callback( GLFWwindow* window, int key, int scancode, int action, int mo
     }
 }
 
+void scroll_callback( GLFWwindow* window, double xoffset, double yoffset ) {
+    u_lightSize *= exp2f( (float)yoffset * -2e-1f );
+}
+
 int main()
 {
     glfwInit();
@@ -127,6 +148,7 @@ int main()
     glfwMakeContextCurrent( window );
     glfwSetFramebufferSizeCallback( window, framebuffer_size_callback );
     glfwSetKeyCallback( window, key_callback );
+    glfwSetScrollCallback( window, scroll_callback );
 
     if ( !gladLoadGLLoader( (GLADloadproc)glfwGetProcAddress ) ) {
         std::cout << "Failed to initialize GLAD" << std::endl;

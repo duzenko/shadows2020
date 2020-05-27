@@ -10,7 +10,7 @@
 #ifdef CASE
 #error "ifdef name conflict"
 #endif
-#define CASE 3
+#define CASE 2
 #if CASE==2
 #define CASE2D
 #elif CASE==3

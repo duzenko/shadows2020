@@ -20,8 +20,10 @@ void init() {
     for ( int i = 0; i < data.N; i += 2 ) {
         data.points[i][0] = floatRandom();
         data.points[i][1] = floatRandom();
-        data.points[i + 1][0] = data.points[i][0] + floatRandom() * .1f;
-        data.points[i + 1][1] = data.points[i][1] + floatRandom() * .1f;
+        float a = floatRandom() * 2 * 3.14159f;
+        float l = floatRandom() * .1f + .05f;
+        data.points[i + 1][0] = data.points[i][0] + l * sin( a );
+        data.points[i + 1][1] = data.points[i][1] + l * cos( a );
     }
 }
 
