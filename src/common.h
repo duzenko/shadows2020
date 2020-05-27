@@ -24,29 +24,8 @@
 #error "Can only define one of CASE2D and CASE3D"
 #endif
 
-#ifdef CASE2D
-
-const int VertexCount = 2 * 400;
-struct SSBO_DATA { 
-    int N;
-    int crap; // SOB aligns to 8 :/
-    float points[VertexCount][2];
-};
-
-#endif
-
-#ifdef CASE3D
-
-const int VertexCount = 3 * 120;
-struct SSBO_DATA {
-    int N;
-    int crap[3]; // aligns to vec4
-    glm::vec4 points[VertexCount];
-};
-
-#endif
-
-extern SSBO_DATA ssboData;
+extern void* ssboData;
+extern int ssboSize;
 
 extern void init();
 extern void compileShader( int shader );

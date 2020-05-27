@@ -140,7 +140,7 @@ int main()
     GLuint ssbo;
     glGenBuffers( 1, &ssbo );
     glBindBuffer( GL_SHADER_STORAGE_BUFFER, ssbo );
-    glBufferData( GL_SHADER_STORAGE_BUFFER, sizeof( ssboData ), &ssboData, GL_DYNAMIC_COPY );
+    glBufferData( GL_SHADER_STORAGE_BUFFER, ssboSize, ssboData, GL_DYNAMIC_COPY );
     glBindBufferBase( GL_SHADER_STORAGE_BUFFER, 0, ssbo );
     glBindBuffer( GL_SHADER_STORAGE_BUFFER, 0 );
 

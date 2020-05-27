@@ -3,11 +3,20 @@
 
 #ifdef CASE2D
 
-struct SSBO_DATA ssboData { VertexCount };
+const int VertexCount = 2 * 400;
+struct SSBO_DATA {
+    int N;
+    int crap; // SOB aligns to 8 :/
+    float points[VertexCount][2];
+};
+
+struct SSBO_DATA data { VertexCount };
+
+void* ssboData = &data;
+int ssboSize = sizeof( data );
 
 void init() {
     srand( 0xabc );
-    auto &data = ssboData;
     for ( int i = 0; i < data.N; i += 2 ) {
         data.points[i][0] = floatRandom();
         data.points[i][1] = floatRandom();
@@ -30,8 +39,8 @@ void draw() {
     glUniform1f( 0, 1 );
     glLineWidth( 2 );
     glBegin( GL_LINES );
-    for ( int i = 0; i < ssboData.N; i++ ) {
-        glVertex2fv( &ssboData.points[i][0] );
+    for ( int i = 0; i < data.N; i++ ) {
+        glVertex2fv( &data.points[i][0] );
     }
     glEnd();
 }
