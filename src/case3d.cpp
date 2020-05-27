@@ -14,8 +14,9 @@ void init() {
         p1.x = floatRandom() * .9f;
         p1.y = floatRandom() * .9f;
         float a = floatRandom() * 2 * 3.14159f;
-        p2.x = p1.x + sin( a ) * .1f;
-        p2.y = p1.y + cos( a ) * .1f;
+        float l = floatRandom() * .1 + .05;
+        p2.x = p1.x + sin( a ) * l;
+        p2.y = p1.y + cos( a ) * l;
         p3 = ( p1 + p2 ) * .5f;
         p3.z = .1f;
     }
