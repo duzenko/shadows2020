@@ -28,8 +28,12 @@ bool intersectsOne( vec2 point1, vec2 point2 ) {
 
 bool intersectsAny() {
     int n = limit ? 2 : N;
-    for ( int i = 0; i < n; i += 2 ) {
-        if ( intersectsOne( points[i], points[i + 1] ) )
+    for ( int i = 0; i < n; i += 3 ) {
+        if ( intersectsOne( points[i], points[i+1] ) )
+            return true;
+        if ( intersectsOne( points[i], points[i+2] ) )
+            return true;
+        if ( intersectsOne( points[i+1], points[i+2] ) )
             return true;
     }
     return false;
