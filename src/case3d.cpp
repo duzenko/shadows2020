@@ -20,10 +20,10 @@ void init() {
     srand( 0xabc );
     for ( int i = 0; i < data.N; i += 3 ) {
         auto& p1 = data.points[i], & p2 = data.points[i + 1], & p3 = data.points[i + 2];
-        p1.x = floatRandom() * .9f;
-        p1.y = floatRandom() * .9f;
-        float a = floatRandom() * 2 * 3.14159f;
-        float l = floatRandom() * .1f + .05f;
+        p1.x = frandom(-1) * .9f;
+        p1.y = frandom(-1) * .9f;
+        float a = frandom(0, 2 * 3.14159f);
+        float l = frandom(.03f, .1f);
         p2.x = p1.x + sin( a ) * l;
         p2.y = p1.y + cos( a ) * l;
         p3 = ( p1 + p2 ) * .5f;

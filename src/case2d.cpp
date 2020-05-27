@@ -18,10 +18,10 @@ int ssboSize = sizeof( data );
 void init() {
     srand( 0xabc );
     for ( int i = 0; i < data.N; i += 2 ) {
-        data.points[i][0] = floatRandom();
-        data.points[i][1] = floatRandom();
-        float a = floatRandom() * 2 * 3.14159f;
-        float l = floatRandom() * .1f + .05f;
+        data.points[i][0] = frandom(-1);
+        data.points[i][1] = frandom(-1);
+        float a = frandom( 0, 2 * 3.14159f );
+        float l = frandom( 0.02f, 0.06f );
         data.points[i + 1][0] = data.points[i][0] + l * sin( a );
         data.points[i + 1][1] = data.points[i][1] + l * cos( a );
     }

@@ -5,12 +5,10 @@
 #include <glm/ext/vector_float3.hpp>
 #include <glm/ext/vector_float4.hpp>
 
-#define floatRandom() (static_cast <float> ( rand() ) / static_cast <float> ( RAND_MAX ) * 2 - 1)
-
 #ifdef CASE
 #error "ifdef name conflict"
 #endif
-#define CASE 2
+#define CASE 3
 #if CASE==2
 #define CASE2D
 #elif CASE==3
@@ -28,7 +26,8 @@ extern void* ssboData;
 extern int ssboSize;
 
 extern void init();
-extern void compileShader( int shader );
 extern void compileShaders();
 extern void loadGlProgram( std::string name );
 extern void draw();
+
+extern float frandom( float start = 0, float end = 1 );

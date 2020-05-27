@@ -14,7 +14,7 @@ vec2 softOffset = soften ? vec2(sin(angle),cos(angle)) : vec2(0);
 vec2 lightSamplePos = lightPos + softOffset * radius * lightSize;
 
 bool ccw( vec2 A, vec2 B, vec2 C ) {
-    return ( C.y - A.y ) * ( B.x - A.x ) > ( B.y - A.y )* ( C.x - A.x );
+    return ( C.y - A.y ) * ( B.x - A.x ) > ( B.y - A.y ) * ( C.x - A.x );
 };
 
 bool intersect( vec2 A, vec2 B, vec2 C, vec2 D ) {
