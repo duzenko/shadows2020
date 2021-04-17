@@ -1,8 +1,7 @@
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 #include "common.h"
-
-#ifdef CASE3D
+#include "../glhelpers/glhelpers.h"
 
 const int VertexCount = 3 * 120;
 struct SSBO_DATA {
@@ -54,5 +53,3 @@ void draw() {
 void compileShaders() {
     loadGlProgram( "3d" );
 }
-
-#endif

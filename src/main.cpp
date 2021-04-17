@@ -1,5 +1,4 @@
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include "common.h"
 #include <glm/mat4x4.hpp>
 #include <glm/ext/matrix_clip_space.hpp>
@@ -7,54 +6,7 @@
 #include <map>
 #include <cmath>
 #include <fstream>
-
-int SCR_WIDTH = 1280;
-int SCR_HEIGHT = 800;
-
-bool u_limit = false;
-bool u_soften = true;
-bool sendTime = true;
-float u_lightSize = 1e-2f;
-
-void processInput( GLFWwindow* window ) {
-    if ( glfwGetKey( window, GLFW_KEY_ESCAPE ) == GLFW_PRESS )
-        glfwSetWindowShouldClose( window, true );
-
-    double xpos, ypos;
-    glfwGetCursorPos( window, &xpos, &ypos );
-    glfwGetFramebufferSize( window, &SCR_WIDTH, &SCR_HEIGHT );
-    float viewAngle = true ? atan( (float) SCR_HEIGHT / SCR_WIDTH ) * 2 : 90;
-
-    glUniform1i( 1, u_limit );
-
-    glm::mat4 proj = glm::perspective( viewAngle, (float) SCR_WIDTH / SCR_HEIGHT, .1f, 10.f );
-    auto projInv = glm::inverse( proj );
-    auto screenPos = glm::vec4( xpos / SCR_WIDTH * 2 - 1, 1 - 2 * ypos / SCR_HEIGHT, 0, 0 );
-    auto worldPos = projInv * screenPos;
-    glUniform2fv( 2, 1, glm::value_ptr( worldPos ) );
-
-    glUniformMatrix4fv( 3, 1, GL_FALSE, glm::value_ptr( proj ) );
-
-    glm::mat4 view = glm::lookAt(
-        glm::vec3( 0, 0, 1 ),
-        glm::vec3( 0, 0, 0 ),
-        glm::vec3( 0, 1, 0 )
-    );
-    glUniformMatrix4fv( 4, 1, GL_FALSE, glm::value_ptr( view ) );
-
-    glUniform1i( 5, u_soften );
-
-    if ( sendTime ) {
-        double time = glfwGetTime();
-        glUniform1f( 6, (float) fmod( time, 1 ) );
-    }
-
-    glUniform1f( 7, u_lightSize );
-}
-
-void framebuffer_size_callback( GLFWwindow* window, int width, int height ) {
-    glViewport( 0, 0, width, height );
-}
+#include "GlfwApp.h"
 
 std::string readGlsl( std::string name ) {
     std::ifstream in( "glsl\\" + name );
@@ -115,76 +67,40 @@ void loadGlProgram( std::string name ) {
     glUseProgram( program );
 }
 
-void key_callback( GLFWwindow* window, int key, int scancode, int action, int mods )
-{
-    if ( action != GLFW_PRESS ) {
-        return;
-    }
-    if ( key == GLFW_KEY_L ) {
-        u_limit = !u_limit;
-    }
-    if ( key == GLFW_KEY_S ) {
-        u_soften = !u_soften;
-    }
-    if ( key == GLFW_KEY_T ) {
-        sendTime = !sendTime;
-    }
-}
+int main() {
+    GlfwApp app;
+    while ( app.run() ) {
+        float viewAngle = atan( (float) app.SCR_HEIGHT / app.SCR_WIDTH ) * 2;
 
-void scroll_callback( GLFWwindow* window, double xoffset, double yoffset ) {
-    u_lightSize *= exp2f( (float)yoffset * -2e-1f );
-}
+        bool u_limit = app.keyL;
+        glUniform1i( 1, u_limit );
 
-int main()
-{
-    glfwInit();
-    glfwWindowHint( GLFW_MAXIMIZED, GLFW_TRUE );
-    GLFWwindow* window = glfwCreateWindow( SCR_WIDTH, SCR_HEIGHT, "OpenGL", NULL, NULL );
-    if ( window == NULL ) {
-        std::cout << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        return -1;
-    }
-    glfwMakeContextCurrent( window );
-    glfwSetFramebufferSizeCallback( window, framebuffer_size_callback );
-    glfwSetKeyCallback( window, key_callback );
-    glfwSetScrollCallback( window, scroll_callback );
+        glm::mat4 proj = glm::perspective( viewAngle, (float) app.SCR_WIDTH / app.SCR_HEIGHT, .1f, 10.f );
+        auto projInv = glm::inverse( proj );
+        auto screenPos = glm::vec4( app.xpos / app.SCR_WIDTH * 2 - 1, 1 - 2 * app.ypos / app.SCR_HEIGHT, 0, 0 );
+        auto worldPos = projInv * screenPos;
+        glUniform2fv( 2, 1, glm::value_ptr( worldPos ) );
 
-    if ( !gladLoadGLLoader( (GLADloadproc)glfwGetProcAddress ) ) {
-        std::cout << "Failed to initialize GLAD" << std::endl;
-        return -1;
-    }
+        glUniformMatrix4fv( 3, 1, GL_FALSE, glm::value_ptr( proj ) );
 
-    glfwSwapInterval( 1 );
+        glm::mat4 view = glm::lookAt(
+            glm::vec3( 0, 0, 1 ),
+            glm::vec3( 0, 0, 0 ),
+            glm::vec3( 0, 1, 0 )
+        );
+        glUniformMatrix4fv( 4, 1, GL_FALSE, glm::value_ptr( view ) );
 
-    init();
+        bool u_soften = app.keyS;
+        glUniform1i( 5, u_soften );
 
-    GLuint ssbo;
-    glGenBuffers( 1, &ssbo );
-    glBindBuffer( GL_SHADER_STORAGE_BUFFER, ssbo );
-    glBufferData( GL_SHADER_STORAGE_BUFFER, ssboSize, ssboData, GL_DYNAMIC_COPY );
-    glBindBufferBase( GL_SHADER_STORAGE_BUFFER, 0, ssbo );
-    glBindBuffer( GL_SHADER_STORAGE_BUFFER, 0 );
+        bool sendTime = app.keyT;
+        if ( sendTime ) {
+            glUniform1f( 6, (float) fmod( app.time, 1 ) );
+        }
 
-    compileShaders();
-
-    while ( !glfwWindowShouldClose( window ) ) {
-        processInput( window );
+        float u_lightSize = app.scrollY;
+        glUniform1f( 7, u_lightSize );
         draw();
-        glfwSwapBuffers( window );
-        glfwPollEvents();
     }
-
-    glfwTerminate();
     return 0;
-}
-
-extern "C" {
-    __declspec(dllexport) int NvOptimusEnablement = 0x00000001;
-    __declspec( dllexport ) int AmdPowerXpressRequestHighPerformance = 1;
-}
-
-float frandom( float start, float end ) {
-    float range = end - start;
-    return start + range * static_cast <float> ( rand() ) / static_cast <float> ( RAND_MAX );
 }
