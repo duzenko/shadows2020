@@ -62,5 +62,5 @@ void main()
     if ( intersectsAny() )
         FragColor = vec4( .3, 0, .3, 1 );
     FragColor *= intensity;
-    FragColor.g += var_position.z*3;
+    FragColor.g += .2-.2*cos(var_position.z*3e3);
 }

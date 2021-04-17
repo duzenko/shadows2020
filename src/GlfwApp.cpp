@@ -64,6 +64,7 @@ GlfwApp::GlfwApp() {
     }
 
     //glfwSwapInterval( 1 );
+    glEnable( GL_DEPTH_TEST );
 }
 
 GlfwApp::~GlfwApp() {
