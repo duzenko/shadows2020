@@ -2,7 +2,7 @@
 
 struct GlfwApp {
 	bool keyL=false;
-	bool keyS=true;
+	int keyS = 1;
 	bool keyT=true;
 
 	float scrollY = 1e-2f;

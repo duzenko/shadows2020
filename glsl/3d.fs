@@ -7,12 +7,8 @@ layout( std430, binding = 0 ) buffer layoutName
     vec4 points[];
 };
 
-vec3 randomSeed1 = vec3(gl_FragCoord.xy, time);
-vec3 randomSeed2 = vec3(gl_FragCoord.yx, 1-time);
-float angle = random(randomSeed1) * 2*PI;
-float radius = sqrt(random(randomSeed2) + 0.1);
-vec2 softOffset = soften ? vec2(sin(angle),cos(angle)) : vec2(0);
-vec3 lightPos3 = vec3(lightPos + softOffset * radius * lightSize, 0.01);
+vec2 softOffset = vec2(0);
+vec3 lightPos3 = vec3(lightPos, 0);
 
 float rayTriangleIntersect( 
     vec3 orig, vec3 dir, 
@@ -56,11 +52,27 @@ bool intersectsAny() {
     return false;
 }
 
+float getLit() {
+    if(soften==0)
+        return intersectsAny() ? 0 : 1;
+    float lit = 0;
+    for(int i=0; i<soften; i++) {
+        vec3 randomSeed1 = vec3(gl_FragCoord.xy, time);
+        vec3 randomSeed2 = vec3(gl_FragCoord.yx, 1-time);
+        float angle = random(randomSeed1) * 2*PI;
+        float radius = sqrt(random(randomSeed2) + 0.1);
+        softOffset = vec2(sin(angle),cos(angle));
+        lightPos3 = vec3(lightPos + softOffset * radius * lightSize, 0.01);
+        lit += intersectsAny() ? 0 : 1;
+    }
+    return lit / soften;
+}
+
 void main()
 {
     FragColor.rgb = vec3( 1 / ( 1 + distance( var_position.xy, lightPos ) ) );
-    if ( intersectsAny() )
-        FragColor = vec4( .3, 0, .3, 1 );
+    float lit = getLit();
+    FragColor.rgb *= lit;
     FragColor *= intensity;
     FragColor.g += .2-.2*cos(var_position.z*3e3);
 }

@@ -134,6 +134,7 @@
       <FileType>Document</FileType>
     </None>
     <None Include="..\glsl\3d.vs" />
+    <None Include="..\glsl\common.glsl" />
     <None Include="..\glsl\random.glsl" />
   </ItemGroup>
   <ItemGroup>
