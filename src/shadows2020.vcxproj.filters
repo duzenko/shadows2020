@@ -13,16 +13,13 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
-    <Filter Include="Source Files\3d">
+    <Filter Include="Resource Files\3d">
       <UniqueIdentifier>{ec637a6f-b0e5-4d0e-9d4f-ee2e4a61e07b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="case3d.cpp">
-      <Filter>Source Files\3d</Filter>
     </ClCompile>
     <ClCompile Include="GlfwApp.cpp">
       <Filter>Source Files</Filter>
@@ -41,15 +38,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\glsl\3d.fs">
-      <Filter>Source Files\3d</Filter>
+      <Filter>Resource Files\3d</Filter>
     </None>
     <None Include="..\glsl\3d.vs">
-      <Filter>Source Files\3d</Filter>
+      <Filter>Resource Files\3d</Filter>
     </None>
     <None Include="..\glsl\random.glsl">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\glsl\common.glsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

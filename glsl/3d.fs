@@ -4,7 +4,6 @@ out vec4 FragColor;
 
 layout( std430, binding = 0 ) buffer layoutName
 {
-    int N;
     vec4 points[];
 };
 
@@ -49,7 +48,7 @@ bool intersectsOne( int i ) {
 }
 
 bool intersectsAny() {
-    int n = limit ? 2 : N;
+    int n = limit ? 2 : vertexCount;
     for ( int i = 0; i < n; i += 3 ) {
         if ( intersectsOne(i) )
             return true;
@@ -59,7 +58,6 @@ bool intersectsAny() {
 
 void main()
 {
-    vec2 xy = vec2( N, N );
     FragColor.rgb = vec3( 1 / ( 1 + distance( var_position.xy, lightPos ) ) );
     if ( intersectsAny() )
         FragColor = vec4( .3, 0, .3, 1 );

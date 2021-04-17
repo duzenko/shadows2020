@@ -61,7 +61,7 @@ void loadGlProgram( std::string name ) {
     glUseProgram( program );
 }
 
-GlProgram::GlProgram() : limit( 1 ), lightPos( 2 ), matProjection( 3 ), matView(4), soften(5), time(6), lightSize(7) {
+GlProgram::GlProgram() : limit( 1 ), lightPos( 2 ), matProjection( 3 ), matView(4), soften(5), time(6), lightSize(7), vertexCount(8) {
     loadGlProgram( "3d" );
 }
 

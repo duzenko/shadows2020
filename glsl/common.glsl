@@ -8,5 +8,6 @@ layout( location = 4 ) uniform mat4 matView;
 layout( location = 5 ) uniform bool soften;
 layout( location = 6 ) uniform float time;
 layout( location = 7 ) uniform float lightSize;
+layout( location = 8 ) uniform int vertexCount;
 
 const float PI = 3.1415926535897932384626433832795;

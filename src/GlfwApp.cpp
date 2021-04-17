@@ -1,6 +1,7 @@
 #include "GlfwApp.h"
 
 #include <cmath>
+#include <iostream>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -62,16 +63,7 @@ GlfwApp::GlfwApp() {
         return;
     }
 
-    glfwSwapInterval( 1 );
-
-    init();
-
-    GLuint ssbo;
-    glGenBuffers( 1, &ssbo );
-    glBindBuffer( GL_SHADER_STORAGE_BUFFER, ssbo );
-    glBufferData( GL_SHADER_STORAGE_BUFFER, ssboSize, ssboData, GL_DYNAMIC_COPY );
-    glBindBufferBase( GL_SHADER_STORAGE_BUFFER, 0, ssbo );
-    glBindBuffer( GL_SHADER_STORAGE_BUFFER, 0 );
+    //glfwSwapInterval( 1 );
 }
 
 GlfwApp::~GlfwApp() {

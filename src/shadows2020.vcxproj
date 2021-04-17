@@ -123,7 +123,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\glad\src\glad.c" />
-    <ClCompile Include="case3d.cpp" />
     <ClCompile Include="GlfwApp.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -136,7 +135,6 @@
       <FileType>Document</FileType>
     </None>
     <None Include="..\glsl\3d.vs" />
-    <None Include="..\glsl\common.glsl" />
     <None Include="..\glsl\random.glsl" />
   </ItemGroup>
   <ItemGroup>

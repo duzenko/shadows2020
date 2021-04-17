@@ -1,7 +1,5 @@
 #pragma once
 
-#include "common.h"
-
 struct GlfwApp {
 	bool keyL=false;
 	bool keyS=true;

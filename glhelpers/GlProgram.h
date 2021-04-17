@@ -17,5 +17,6 @@ struct GlProgram {
 	GlProgramUniform soften;
 	GlProgramUniform time;
 	GlProgramUniform lightSize;
+	GlProgramUniform vertexCount;
 	GlProgram();
 };
