@@ -17,21 +17,17 @@ void key_callback( GLFWwindow* window, int key, int scancode, int action, int mo
     }
     GlfwApp &app = *(GlfwApp*) glfwGetWindowUserPointer( window );
     if ( key == GLFW_KEY_L ) {
-        //u_limit = !u_limit;
         app.keyL = !app.keyL;
     }
     if ( key == GLFW_KEY_S ) {
-        //u_soften = !u_soften;
         app.keyS = !app.keyS;
     }
     if ( key == GLFW_KEY_T ) {
-        //sendTime = !sendTime;
         app.keyT = !app.keyT;
     }
 }
 
 void scroll_callback( GLFWwindow* window, double xoffset, double yoffset ) {
-    //u_lightSize
     GlfwApp& app = *(GlfwApp*) glfwGetWindowUserPointer( window );
     app.scrollY *= exp2f( (float) yoffset * -2e-1f );
 }
@@ -42,7 +38,7 @@ void GlfwApp::processInput() {
 
     glfwGetCursorPos( window, &xpos, &ypos );
     glfwGetFramebufferSize( window, &SCR_WIDTH, &SCR_HEIGHT );
-    double time = glfwGetTime();
+    time = glfwGetTime();
 }
 
 GlfwApp::GlfwApp() {
@@ -76,8 +72,6 @@ GlfwApp::GlfwApp() {
     glBufferData( GL_SHADER_STORAGE_BUFFER, ssboSize, ssboData, GL_DYNAMIC_COPY );
     glBindBufferBase( GL_SHADER_STORAGE_BUFFER, 0, ssbo );
     glBindBuffer( GL_SHADER_STORAGE_BUFFER, 0 );
-
-    compileShaders();
 }
 
 GlfwApp::~GlfwApp() {

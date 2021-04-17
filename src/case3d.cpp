@@ -49,7 +49,3 @@ void draw() {
     }
     glEnd();
 }
-
-void compileShaders() {
-    loadGlProgram( "3d" );
-}
