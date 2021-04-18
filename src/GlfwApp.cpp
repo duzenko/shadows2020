@@ -21,7 +21,7 @@ void key_callback( GLFWwindow* window, int key, int scancode, int action, int mo
         app.keyL = !app.keyL;
     }
     if ( key == GLFW_KEY_S ) {
-        app.keyS = ( app.keyS + 1 ) % 3;
+        app.keyS = app.keyS ? app.keyS * 2 % 8 : 1;
     }
     if ( key == GLFW_KEY_T ) {
         app.keyT = !app.keyT;

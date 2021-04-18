@@ -68,7 +68,7 @@ void setup( GlProgram &shader, GlfwApp &app ) {
 
     bool sendTime = app.keyT;
     if ( sendTime ) {
-        shader.time = (float) fmod( app.time, 1 );
+        shader.time = (float) fmod( app.time, 2*M_PI );
     }
 
     shader.lightSize = app.scrollY;
