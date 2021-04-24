@@ -128,6 +128,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GlfwApp.h" />
+    <ClInclude Include="rnd.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\glsl\3d.fs">

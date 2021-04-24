@@ -11,7 +11,3 @@ extern "C" {
     __declspec( dllexport ) int AmdPowerXpressRequestHighPerformance = 1;
 }
 
-float frandom( float start, float end ) {
-    float range = end - start;
-    return start + range * static_cast <float> ( rand() ) / static_cast <float> ( RAND_MAX );
-}

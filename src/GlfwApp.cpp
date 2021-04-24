@@ -30,7 +30,7 @@ void key_callback( GLFWwindow* window, int key, int scancode, int action, int mo
 
 void scroll_callback( GLFWwindow* window, double xoffset, double yoffset ) {
     GlfwApp& app = *(GlfwApp*) glfwGetWindowUserPointer( window );
-    app.scrollY *= exp2f( (float) yoffset * -2e-1f );
+    app.scrollY *= exp2f( (float) yoffset * 2e-1f );
 }
 
 void GlfwApp::processInput() {

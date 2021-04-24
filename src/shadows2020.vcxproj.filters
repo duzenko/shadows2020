@@ -32,6 +32,9 @@
     <ClInclude Include="GlfwApp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="rnd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\glsl\3d.fs">

@@ -36,7 +36,6 @@ float rayTriangleIntersect(
 } 
 
 bool intersectsOne( int i ) {
-    //return distance(var_position.xyz, points[i].xyz) < .03|| distance(var_position.xyz, points[i+1].xyz) < .03|| distance(var_position.xyz, points[i+2].xyz) < .03;
     float rayT = rayTriangleIntersect(lightPos3, var_position.xyz - lightPos3, points[i].xyz, points[i+1].xyz, points[i+2].xyz );
     if(rayT <= 0)
         return false;
@@ -63,7 +62,7 @@ float getLit() {
         float radius = sqrt(random(randomSeed2) + 0.1);
         radius = sqrt(random(randomSeed2) + 0.1);
         softOffset = vec2(sin(angle),cos(angle));
-        lightPos3 = vec3(lightPos + softOffset * radius * lightSize, 0.01);
+        lightPos3 = vec3(lightPos + softOffset * radius * lightSize, lightSize);
         lit += intersectsAny() ? 0 : 1;
     }
     return lit / soften;
@@ -75,5 +74,7 @@ void main()
     float lit = getLit();
     FragColor.rgb *= lit;
     FragColor *= intensity;
-    FragColor.g += .2-.2*cos(var_position.z*3e3);
+    FragColor.g += .2-.2*cos(var_position.z*6e2);
+    if(distance(distance(var_position.xy, lightPos)/lightSize, 1) < 0.1)
+        FragColor.rgb = vec3(1, 0, 0);
 }
