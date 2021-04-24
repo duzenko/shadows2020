@@ -10,6 +10,8 @@ struct GlProgramUniform {
 };
 
 struct GlProgram {
+	GLuint handle;
+	
 	GlProgramUniform limit;
 	GlProgramUniform lightPos;
 	GlProgramUniform matProjection;
@@ -18,5 +20,7 @@ struct GlProgram {
 	GlProgramUniform time;
 	GlProgramUniform lightSize;
 	GlProgramUniform vertexCount;
-	GlProgram();
+
+	GlProgram( const char* name );
+	void Use();
 };

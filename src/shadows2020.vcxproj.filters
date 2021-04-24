@@ -13,7 +13,10 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
-    <Filter Include="Resource Files\3d">
+    <Filter Include="Resource Files\pass2">
+      <UniqueIdentifier>{16f54170-7a57-4657-9dcb-ab2f68c1075c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\pass1">
       <UniqueIdentifier>{ec637a6f-b0e5-4d0e-9d4f-ee2e4a61e07b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -37,17 +40,23 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\glsl\3d.fs">
-      <Filter>Resource Files\3d</Filter>
-    </None>
-    <None Include="..\glsl\3d.vs">
-      <Filter>Resource Files\3d</Filter>
-    </None>
     <None Include="..\glsl\random.glsl">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="..\glsl\common.glsl">
       <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\glsl\pass2.fs">
+      <Filter>Resource Files\pass2</Filter>
+    </None>
+    <None Include="..\glsl\pass2.vs">
+      <Filter>Resource Files\pass2</Filter>
+    </None>
+    <None Include="..\glsl\pass1.fs">
+      <Filter>Resource Files\pass1</Filter>
+    </None>
+    <None Include="..\glsl\pass1.vs">
+      <Filter>Resource Files\pass1</Filter>
     </None>
   </ItemGroup>
 </Project>

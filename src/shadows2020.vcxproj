@@ -131,11 +131,13 @@
     <ClInclude Include="rnd.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\glsl\3d.fs">
+    <None Include="..\glsl\pass1.fs">
       <FileType>Document</FileType>
     </None>
-    <None Include="..\glsl\3d.vs" />
+    <None Include="..\glsl\pass1.vs" />
     <None Include="..\glsl\common.glsl" />
+    <None Include="..\glsl\pass2.fs" />
+    <None Include="..\glsl\pass2.vs" />
     <None Include="..\glsl\random.glsl" />
   </ItemGroup>
   <ItemGroup>

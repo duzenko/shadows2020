@@ -7,6 +7,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <fstream>
+#include <string>
 #include "GlfwApp.h"
 #include "rnd.h"
 #include "..\glhelpers\GlProgram.h"
@@ -15,6 +16,8 @@
 
 const int PyramidCount = 20, TriangleCount = PyramidCount * 3, VertexCount = 3 * TriangleCount;
 glm::vec4 points[VertexCount];
+
+GlfwApp app;
 
 // create the pyramid vertices
 void initGeometry() {
@@ -27,10 +30,7 @@ void initGeometry() {
 }
 
 // shader uniforms
-void setup( GlProgram &shader, GlfwApp &app ) {
-    // speed test - one triangle only
-    shader.limit = app.keyL;
-
+void setup( GlProgram &shader ) {
     // GLSL routine - projection matrix
     float fovY = atan( (float) app.SCR_HEIGHT / app.SCR_WIDTH ) * 2;
     glm::mat4 proj = glm::perspective( fovY, (float) app.SCR_WIDTH / app.SCR_HEIGHT, .1f, 10.f );
@@ -64,11 +64,12 @@ void setup( GlProgram &shader, GlfwApp &app ) {
 
     // SSBO size info
     shader.vertexCount = VertexCount;
+
+    // speed test - one triangle only
+    shader.limit = app.keyL;
 }
 
-void draw() {
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-
+void drawGeometry() {
     // canvas
     glUniform1f( 0, 0.3f );
     glBegin( GL_QUADS );
@@ -77,7 +78,6 @@ void draw() {
     glVertex2i( 1, 1 );
     glVertex2i( -1, 1 );
     glEnd();
-
     // pyramids
     glUniform1f( 0, 1 );
     glBegin( GL_TRIANGLES );
@@ -87,14 +87,37 @@ void draw() {
     glEnd();
 }
 
+void drawPass( GlProgram& shader ) {
+    shader.Use();
+    setup( shader );
+    drawGeometry();
+}
+
+void draw( GlProgram& pass1, GlProgram& pass2 ) {
+    glClearColor( 1, 1, 1, 1 );
+    glEnable( GL_BLEND );
+    glBlendFunc( GL_DST_COLOR, GL_ZERO );
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    // depth pass
+    glDepthFunc( GL_LESS );
+    glDepthMask( GL_TRUE );
+    glColorMask( GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE );
+    drawGeometry();
+    glDepthFunc( GL_EQUAL );
+    glDepthMask( GL_FALSE );
+    glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
+    // shadows pass
+    drawPass( pass1 );
+    // color pass
+    drawPass( pass2 );
+}
+
 int main() {
     initGeometry();
-    GlfwApp app;
-    GlProgram shader;
+    GlProgram shadows( "pass1" ), color( "pass2" );
     GlSsbo ssbo( sizeof( points ), points );
     while ( app.run() ) {
-        setup( shader, app );
-        draw();
+        draw( shadows, color );
     }
     return 0;
 }

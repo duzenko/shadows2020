@@ -40,7 +40,7 @@ void loadShader( std::string& name, GLenum shaderType, GLuint program ) {
     glAttachShader( program, shader );
 }
 
-void loadGlProgram( std::string name ) {
+GLuint loadGlProgram( std::string &name ) {
     auto program = glCreateProgram();
     loadShader( name, GL_VERTEX_SHADER, program );
     loadShader( name, GL_FRAGMENT_SHADER, program );
@@ -59,10 +59,16 @@ void loadGlProgram( std::string name ) {
             std::cout << i;
     }
     glUseProgram( program );
+    return program;
 }
 
-GlProgram::GlProgram() : limit( 1 ), lightPos( 2 ), matProjection( 3 ), matView(4), soften(5), time(6), lightSize(7), vertexCount(8) {
-    loadGlProgram( "3d" );
+GlProgram::GlProgram( const char* name ) : limit( 1 ), lightPos( 2 ), matProjection( 3 ), matView(4), soften(5), time(6), lightSize(7), vertexCount(8) {
+    std::string s( name );
+    handle = loadGlProgram( s );
+}
+
+void GlProgram::Use() {
+    glUseProgram( handle );
 }
 
 void GlProgramUniform::operator = ( int value ) {
