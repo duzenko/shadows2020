@@ -33,7 +33,11 @@ void GlfwWin::processInput() {
     if ( glfwGetKey( window, GLFW_KEY_ESCAPE ) == GLFW_PRESS )
         glfwSetWindowShouldClose( window, true );
 
-    glfwGetCursorPos( window, &xpos, &ypos );
+    CursorPos pos;
+    glfwGetCursorPos( window, &pos.x, &pos.y );
+    mouseMoved = pos.x != cursorPos.x || pos.y != cursorPos.y;
+    cursorPos = pos;
+
     glfwGetFramebufferSize( window, &SCR_WIDTH, &SCR_HEIGHT );
     time = glfwGetTime();
 }

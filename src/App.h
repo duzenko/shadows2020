@@ -25,10 +25,11 @@ struct App {
         }
     }
 
+    std::vector<int> tmp;
+
     void draw() {
         glClearColor( 1, 1, 1, 1 );
         glEnable( GL_BLEND );
-        glBlendFunc( GL_DST_COLOR, GL_ZERO );
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
         // depth pass
         glDepthFunc( GL_LESS );
@@ -41,7 +42,16 @@ struct App {
         glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
         // shadows pass
         drawPass( shadows );
-        //glCopyTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, app.window.SCR_WIDTH, app.window.SCR_HEIGHT, 0 );
+        tmp.resize( window.SCR_WIDTH * window.SCR_HEIGHT );
+        if ( !window.mouseMoved ) {
+            glBlendColor( 0, 0, 0, 1.0f / ( 2 << 4 ) );
+            glBlendFunc( GL_ONE_MINUS_CONSTANT_ALPHA, GL_CONSTANT_ALPHA );
+            glDisable( GL_DEPTH_TEST );
+            glDrawPixels( window.SCR_WIDTH, window.SCR_HEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, &tmp[0] );
+            glEnable( GL_DEPTH_TEST );
+        }
+        glReadPixels( 0, 0, window.SCR_WIDTH, window.SCR_HEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, &tmp[0] );
+        glBlendFunc( GL_DST_COLOR, GL_ZERO );
         checkErrors();
         // color pass
         drawPass( color );

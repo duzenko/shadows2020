@@ -27,31 +27,31 @@ struct ShadowShader : CommonShader {
 
     using CommonShader::CommonShader;
 
-    virtual void setup( GlfwWin& app ) {
-        CommonShader::setup( app );
+    virtual void setup( GlfwWin& window ) {
+        CommonShader::setup( window );
         // light follows mouse cursor
         auto projInv = glm::inverse( proj );
-        auto screenPos = glm::vec4( app.xpos / app.SCR_WIDTH * 2 - 1, 1 - 2 * app.ypos / app.SCR_HEIGHT, 0, 0 );
+        auto screenPos = glm::vec4( window.cursorPos.x / window.SCR_WIDTH * 2 - 1, 1 - 2 * window.cursorPos.y / window.SCR_HEIGHT, 0, 0 );
         auto worldPos = projInv * screenPos;
         lightPos = glm::vec2( worldPos );
 
         // stop time noise
-        bool sendTime = app.keyT;
+        bool sendTime = window.keyT;
         if ( sendTime ) {
-            time = (float) fmod( app.time, 2 * M_PI );
+            time = (float) fmod( window.time, 2 * M_PI );
         }
 
         // light size
-        lightSize = app.scrollY;
+        lightSize = window.scrollY;
 
         // SSBO size info
         vertexCount = VertexCount;
 
         // speed test - one triangle only
-        limit = app.keyL;
+        limit = window.keyL;
 
         // softener level
-        soften = app.keyS;
+        soften = window.keyS;
     }
 };
 
