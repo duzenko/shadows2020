@@ -1,6 +1,8 @@
 #pragma once
 
 struct GlSsbo {
-	GlSsbo( int ssboSize, void* ssboData );
+	GLuint ssbo;
+	GlSsbo();
+	void Upload( std::vector<glm::vec4>& data );
 };
 

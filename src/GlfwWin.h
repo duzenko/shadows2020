@@ -1,6 +1,9 @@
 #pragma once
 
-struct GlfwApp {
+#include "..\glhelpers\GlProgram.h"
+
+
+struct GlfwWin {
 	bool keyL=false;
 	int keyS = 1;
 	bool keyT=true;
@@ -12,10 +15,9 @@ struct GlfwApp {
 	int SCR_WIDTH = 1280;
 	int SCR_HEIGHT = 800;
 
-	GlfwApp();
-	~GlfwApp();
-	bool run();
+	GlfwWin();
+	~GlfwWin();
+	bool messageLoop();
 
 	void processInput();
 };
-

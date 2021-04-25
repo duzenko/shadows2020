@@ -1,9 +1,5 @@
-#include "GlfwApp.h"
+#include "pch.h"
 
-#include <cmath>
-#include <iostream>
-
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 GLFWwindow* window;
@@ -16,7 +12,7 @@ void key_callback( GLFWwindow* window, int key, int scancode, int action, int mo
     if ( action != GLFW_PRESS ) {
         return;
     }
-    GlfwApp &app = *(GlfwApp*) glfwGetWindowUserPointer( window );
+    GlfwWin &app = *(GlfwWin*) glfwGetWindowUserPointer( window );
     if ( key == GLFW_KEY_L ) {
         app.keyL = !app.keyL;
     }
@@ -29,11 +25,11 @@ void key_callback( GLFWwindow* window, int key, int scancode, int action, int mo
 }
 
 void scroll_callback( GLFWwindow* window, double xoffset, double yoffset ) {
-    GlfwApp& app = *(GlfwApp*) glfwGetWindowUserPointer( window );
+    GlfwWin& app = *(GlfwWin*) glfwGetWindowUserPointer( window );
     app.scrollY *= exp2f( (float) yoffset * 2e-1f );
 }
 
-void GlfwApp::processInput() {
+void GlfwWin::processInput() {
     if ( glfwGetKey( window, GLFW_KEY_ESCAPE ) == GLFW_PRESS )
         glfwSetWindowShouldClose( window, true );
 
@@ -42,7 +38,7 @@ void GlfwApp::processInput() {
     time = glfwGetTime();
 }
 
-GlfwApp::GlfwApp() {
+GlfwWin::GlfwWin() {
     glfwInit();
     glfwWindowHint( GLFW_MAXIMIZED, GLFW_TRUE );
     window = glfwCreateWindow( SCR_WIDTH, SCR_HEIGHT, "OpenGL", NULL, NULL );
@@ -67,11 +63,11 @@ GlfwApp::GlfwApp() {
     glEnable( GL_DEPTH_TEST );
 }
 
-GlfwApp::~GlfwApp() {
+GlfwWin::~GlfwWin() {
     glfwTerminate();
 }
 
-bool GlfwApp::run() {
+bool GlfwWin::messageLoop() {
     if ( !window )
         return false;
     processInput();

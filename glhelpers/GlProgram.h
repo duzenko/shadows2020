@@ -10,6 +10,7 @@ struct GlProgramUniform {
 };
 
 struct GlProgram {
+	std::string name;
 	GLuint handle;
 	
 	GlProgramUniform limit;

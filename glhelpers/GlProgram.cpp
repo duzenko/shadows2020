@@ -63,26 +63,35 @@ GLuint loadGlProgram( std::string &name ) {
 }
 
 GlProgram::GlProgram( const char* name ) : limit( 1 ), lightPos( 2 ), matProjection( 3 ), matView(4), soften(5), time(6), lightSize(7), vertexCount(8) {
-    std::string s( name );
-    handle = loadGlProgram( s );
+    this->name = name;
+    handle = loadGlProgram( this->name );
 }
 
 void GlProgram::Use() {
     glUseProgram( handle );
+    checkErrors();
+
 }
 
 void GlProgramUniform::operator = ( int value ) {
     glUniform1i( location, value );
+    checkErrors();
+
 }
 
 void GlProgramUniform::operator = ( float value ) {
     glUniform1f( location, value );
+    checkErrors();
 }
 
 void GlProgramUniform::operator = ( glm::vec2& value ) {
     glUniform2fv( location, 1, glm::value_ptr( value ) );
+    checkErrors();
+
 }
 
 void GlProgramUniform::operator = ( glm::mat4& value ) {
     glUniformMatrix4fv( location, 1, GL_FALSE, glm::value_ptr( value ) );
+    checkErrors();
+
 }
