@@ -15,6 +15,7 @@
 #include "rnd.h"
 #include "..\glhelpers\GlProgram.h"
 #include "..\glhelpers\GlSsbo.h"
+#include "..\glhelpers\GlPbo.h"
 #include "../glhelpers/glhelpers.h"
 
 const int PyramidCount = 20, TriangleCount = PyramidCount * 3, VertexCount = 3 * TriangleCount;

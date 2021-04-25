@@ -156,6 +156,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="glhelpers.h" />
+    <ClInclude Include="GlPbo.h" />
     <ClInclude Include="GlProgram.h" />
     <ClInclude Include="GlSsbo.h" />
     <ClInclude Include="pch.h" />

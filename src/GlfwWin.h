@@ -13,7 +13,7 @@ struct GlfwWin {
 	struct CursorPos {
 		double x = 0, y = 0;
 	} cursorPos;
-	bool mouseMoved;
+	bool mouseMoved = true;
 	double time=0;
 	int SCR_WIDTH = 1280;
 	int SCR_HEIGHT = 800;

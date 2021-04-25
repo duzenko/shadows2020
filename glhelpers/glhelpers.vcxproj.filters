@@ -27,6 +27,9 @@
     <ClInclude Include="GlSsbo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GlPbo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glhelpers.cpp">

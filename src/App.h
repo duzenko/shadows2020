@@ -6,6 +6,7 @@ struct App {
 	std::vector<glm::vec4> points;
     GlfwWin window;
     GlSsbo ssbo;
+    GlPbo pbo;
     ShadowShader shadows;
     ColorShader color;
 
@@ -25,8 +26,6 @@ struct App {
         }
     }
 
-    std::vector<int> tmp;
-
     void draw() {
         glClearColor( 1, 1, 1, 1 );
         glEnable( GL_BLEND );
@@ -42,15 +41,19 @@ struct App {
         glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
         // shadows pass
         drawPass( shadows );
-        tmp.resize( window.SCR_WIDTH * window.SCR_HEIGHT );
+        pbo.Resize( window.SCR_WIDTH * window.SCR_HEIGHT * 4 );
         if ( !window.mouseMoved ) {
             glBlendColor( 0, 0, 0, 1.0f / ( 2 << 4 ) );
             glBlendFunc( GL_ONE_MINUS_CONSTANT_ALPHA, GL_CONSTANT_ALPHA );
             glDisable( GL_DEPTH_TEST );
-            glDrawPixels( window.SCR_WIDTH, window.SCR_HEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, &tmp[0] );
+            checkErrors();
+            glDrawPixels( window.SCR_WIDTH, window.SCR_HEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, 0 );
+            checkErrors();
             glEnable( GL_DEPTH_TEST );
         }
-        glReadPixels( 0, 0, window.SCR_WIDTH, window.SCR_HEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, &tmp[0] );
+        checkErrors();
+        glReadPixels( 0, 0, window.SCR_WIDTH, window.SCR_HEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, 0 );
+        checkErrors();
         glBlendFunc( GL_DST_COLOR, GL_ZERO );
         checkErrors();
         // color pass
