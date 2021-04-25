@@ -12,3 +12,4 @@ s - disable softening
 
 t - toggle softening time input
 
+mouse wheel - resize light
