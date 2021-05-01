@@ -42,7 +42,7 @@ struct App {
         // shadows pass
         drawPass( shadows );
         pbo.Resize( window.SCR_WIDTH * window.SCR_HEIGHT * 4 );
-        if ( !window.mouseMoved ) {
+        if ( !window.mouseMoved && window.keyB ) {
             glBlendColor( 0, 0, 0, 1.0f / ( 2 << 4 ) );
             glBlendFunc( GL_ONE_MINUS_CONSTANT_ALPHA, GL_CONSTANT_ALPHA );
             glDisable( GL_DEPTH_TEST );

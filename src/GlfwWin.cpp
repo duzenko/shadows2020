@@ -22,6 +22,9 @@ void key_callback( GLFWwindow* window, int key, int scancode, int action, int mo
     if ( key == GLFW_KEY_T ) {
         app.keyT = !app.keyT;
     }
+    if ( key == GLFW_KEY_B ) {
+        app.keyB = !app.keyB;
+    }
 }
 
 void scroll_callback( GLFWwindow* window, double xoffset, double yoffset ) {

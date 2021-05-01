@@ -6,6 +6,8 @@ https://github.com/duzenko/shadows2020/releases
 
 # Controls
 
+b - toggle frame blending
+
 l - toggle shadow tri limit
 
 s - disable softening

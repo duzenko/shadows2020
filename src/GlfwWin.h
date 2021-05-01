@@ -7,6 +7,7 @@ struct GlfwWin {
 	bool keyL=false;
 	int keyS = 1;
 	bool keyT=true;
+	bool keyB = true;
 
 	float scrollY = 1e-2f;
 

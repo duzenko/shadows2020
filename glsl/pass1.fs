@@ -53,7 +53,7 @@ bool intersectsAny() {
 
 float getLit() {
     if(soften==0)
-        return intersectsAny() ? 0 : 1;
+        return intersectsAny() ? 0.2 : 1;
     float lit = 0;
     for(int i=0; i<soften; i++) {
         vec3 randomSeed1 = vec3(gl_FragCoord.xy+i+time, i+time);
@@ -64,7 +64,7 @@ float getLit() {
         lightPos3 = vec3(lightPos + softOffset * radius * lightSize, lightSize);
         lit += intersectsAny() ? 0 : 1;
     }
-    return lit / soften;
+    return lit / soften * 0.8 + 0.2;
 }
 
 void main()
